@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './App.css';
 
 function App() {
@@ -11,11 +11,24 @@ function App() {
 
   return (
     <>
+      <Clock />
       <TodoInput setTodo={setTodo} />
       <TodoList todo={todo} setTodo={setTodo} />
     </>
   );
 }
+
+const Clock = () => {
+  const [time, setTime] = useState(new Date());
+
+  useEffect(() => {
+    setInterval(() => {
+      setTime(new Date());
+    }, 1000);
+  }, []);
+
+  return <div>{time.toLocaleTimeString()}</div>;
+};
 
 const TodoInput = ({ setTodo }) => {
   const inputRef = useRef(null);
