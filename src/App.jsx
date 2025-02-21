@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import './App.css';
 
 function App() {
@@ -9,10 +9,19 @@ function App() {
     },
   ]);
 
+  const inputRef = useRef(null);
+  const addTodo = () => {
+    const newTodo = {
+      id: Number(new Date()),
+      content: inputRef.current.value,
+    };
+    setTodo((prev) => [...prev, newTodo]);
+  };
+
   return (
     <>
-      <input />
-      <button>추가</button>
+      <input ref={inputRef} />
+      <button onClick={addTodo}>추가</button>
       <ul>
         {todo.map((el) => (
           <li key={el.id}>{el.content}</li>
