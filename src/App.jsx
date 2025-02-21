@@ -23,8 +23,17 @@ function App() {
       <input ref={inputRef} />
       <button onClick={addTodo}>추가</button>
       <ul>
-        {todo.map((el) => (
-          <li key={el.id}>{el.content}</li>
+        {todo.map((todo) => (
+          <li key={todo.id}>
+            {todo.content}
+            <button
+              onClick={() => {
+                setTodo((prev) => prev.filter((el) => el.id !== todo.id));
+              }}
+            >
+              삭제
+            </button>
+          </li>
         ))}
       </ul>
     </>
