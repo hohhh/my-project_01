@@ -9,7 +9,17 @@ function App() {
     },
   ]);
 
+  return (
+    <>
+      <TodoInput setTodo={setTodo} />
+      <TodoList todo={todo} setTodo={setTodo} />
+    </>
+  );
+}
+
+const TodoInput = ({ setTodo }) => {
   const inputRef = useRef(null);
+
   const addTodo = () => {
     const newTodo = {
       id: Number(new Date()),
@@ -22,22 +32,35 @@ function App() {
     <>
       <input ref={inputRef} />
       <button onClick={addTodo}>추가</button>
+    </>
+  );
+};
+
+const TodoList = ({ todo, setTodo }) => {
+  return (
+    <>
       <ul>
-        {todo.map((todo) => (
-          <li key={todo.id}>
-            {todo.content}
-            <button
-              onClick={() => {
-                setTodo((prev) => prev.filter((el) => el.id !== todo.id));
-              }}
-            >
-              삭제
-            </button>
-          </li>
+        {todo.map((el) => (
+          <Todo key={todo.id} todo={el} setTodo={setTodo} />
         ))}
       </ul>
     </>
   );
-}
+};
+
+const Todo = ({ todo, setTodo }) => {
+  return (
+    <li>
+      {todo.content}
+      <button
+        onClick={() => {
+          setTodo((prev) => prev.filter((el) => el.id !== todo.id));
+        }}
+      >
+        삭제
+      </button>
+    </li>
+  );
+};
 
 export default App;
