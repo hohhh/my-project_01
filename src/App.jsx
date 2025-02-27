@@ -11,7 +11,7 @@ function App() {
 
   return (
     <>
-      <Clock />
+      <StopWatch />
       <TodoInput setTodo={setTodo} />
       <TodoList todo={todo} setTodo={setTodo} />
     </>
@@ -28,6 +28,53 @@ const Clock = () => {
   }, []);
 
   return <div>{time.toLocaleTimeString()}</div>;
+};
+
+const formatTime = (seconds) => {
+  // 00 : 00 : 00
+  // 1시간 : 3600
+  // 1분 : 60초
+  // 12345
+  // 12345 / 3600(절대값) -> 시간
+  // (12345 % 3600) / 60 (절대값) -> 분
+  // 12345% 60 -> 초
+
+  const timeString = `${String(Math.floor(seconds / 3600)).padStart(2, '0')} : ${String(Math.floor((seconds % 3600) / 60)).padStart(2, '0')} : ${String(seconds % 60).padStart(2, '0')}`;
+  return timeString;
+};
+
+const StopWatch = () => {
+  const [time, setTime] = useState(0);
+  const [isOn, setIsOn] = useState(false);
+  const timerRef = useRef(null);
+  // console.log(timerRef);
+  useEffect(() => {
+    if (isOn === true) {
+      const timerId = setInterval(() => {
+        setTime((prev) => prev + 1);
+      }, 1000);
+      timerRef.current = timerId;
+    } else {
+      clearInterval(timerRef.current);
+    }
+  }, [isOn]);
+
+  return (
+    <>
+      <div>
+        {formatTime(time)}
+        <button onClick={() => setIsOn((prev) => !prev)}>{isOn ? '끄기' : '켜기'}</button>
+        <button
+          onClick={() => {
+            setTime(0);
+            setIsOn(false);
+          }}
+        >
+          리셋
+        </button>
+      </div>
+    </>
+  );
 };
 
 const TodoInput = ({ setTodo }) => {
