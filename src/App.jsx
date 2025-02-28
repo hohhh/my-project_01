@@ -11,12 +11,50 @@ function App() {
 
   return (
     <>
+      <Advice />
       <Timer />
       <TodoInput setTodo={setTodo} />
       <TodoList todo={todo} setTodo={setTodo} />
     </>
   );
 }
+
+const useFetch = (url) => {
+  const [isLoading, setIsLoading] = useState(true); // 데이터를 받아오는 중인지
+  const [data, setData] = useState(null); // 데이터를 받아올 공간
+  // 에러를 받아오는 공간은 생략
+
+  useEffect(() => {
+    fetch(url) // 정해준 url 대신, 인자를 받아올 url로 요청 보내기
+      .then((res) => res.json())
+      .then((res) => {
+        setData(res); // data는 setData로 보내주기
+        setIsLoading(false); // 응답을 받았다면 Loading 은 False
+      });
+  }, [url]); // url에 따라 요청을 보내는 거니까
+  return [isLoading, data];
+};
+
+const Advice = () => {
+  const [isLoading, data] = useFetch('https://korean-advice-open-api.vercel.app/api/advice');
+  /* // useState 대신 useFeatch 쓰고 useEffect가 필요 없어짐
+   const [data, setData] = useState(null);
+  useEffect(() => {
+    fetch('https://korean-advice-open-api.vercel.app/api/advice')
+      .then((res) => res.json())
+      .then((res) => setData(res));
+  }, []); */
+  return (
+    <>
+      {!isLoading && (
+        <>
+          <div>{data.message}</div>
+          <div>- {data.author}</div>
+        </>
+      )}
+    </>
+  );
+};
 
 const Clock = () => {
   const [time, setTime] = useState(new Date());
