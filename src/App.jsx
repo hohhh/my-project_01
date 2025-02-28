@@ -194,7 +194,7 @@ const TodoList = ({ todo, setTodo }) => {
     <>
       <ul>
         {todo.map((el) => (
-          <Todo key={todo.id} todo={el} setTodo={setTodo} />
+          <Todo key={el.id} todo={el} setTodo={setTodo} />
         ))}
       </ul>
     </>
